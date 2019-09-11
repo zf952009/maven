@@ -1,0 +1,147 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="c.z.dao.UserDao">
+    <sql id="findle">
+        id id,name name,password password,res res
+    </sql>
+    <insert id="saveUser">
+        insert into user_copy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null or id !=''">
+                id,
+            </if>
+            <if test="name!=null or name!=''">
+                name,
+            </if>
+            <if test="password!=null or password !=''">
+                password,
+            </if>
+        </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id!=null or id !=''">
+                #{id},
+            </if>
+            <if test="name!=null or name!=''">
+                #{name},
+            </if>
+            <if test="password!=null or password !=''">
+                #{password},
+            </if>
+        </trim>
+    </insert>
+    <insert id="saveUserList">
+        insert into user_copy(name,password,res) values
+        <foreach collection="list" item="user" separator=",">
+            (#{user.name},#{user.password},0)
+        </foreach>
+    </insert>
+    <update id="updateUser">
+        update user_copy
+        <set>
+            <if test="name!=null and name!=''">
+                name = #{name},
+            </if>
+            <if test="password!=null and name!=''">
+                password=#{password},
+            </if>
+            <if test="res!=null and res!=''">
+                res = #{res},
+            </if>
+        </set>
+        <where>
+            <if test="id!=null and id !=''">
+                id=#{id}
+            </if>
+        </where>
+    </update>
+    <update id="deleteUserByID">
+        update user_copy
+        <set>
+            <if test="id!=null and id!=''">
+                res=1
+            </if>
+        </set>
+        <where>
+            <if test="id!=null and id!=''">
+                id=#{id}
+            </if>
+        </where>
+    </update>
+    <update id="deleteUserByUser">
+        update user_copy
+        <set>
+            <if test="id!=null and id!=''">
+                res=1
+            </if>
+        </set>
+        <where>
+            <if test="id!=null and id!=''">
+                id=#{id}
+            </if>
+        </where>
+    </update>
+    <update id="updateBatchUserDisbled">
+        <foreach collection="list" item="itme" separator=";">
+            update user_copy
+            <set>
+                res=1
+            </set>
+            where id=#{itme}
+        </foreach>
+    </update>
+    <update id="updateBatchUserStart">
+        <foreach collection="list" item="itme" separator=";">
+            update user_copy
+            <set>
+                res=0
+            </set>
+            where id=#{itme}
+        </foreach>
+    </update>
+    <update id="updateBatchUser">
+        <foreach collection="list" item="user" separator=";">
+            update user_copy
+            <set>
+                name=#{user.name},password=#{user.password}
+            </set>
+            where id=#{user.id}
+        </foreach>
+    </update>
+    <select id="getUserAll" resultType="c.z.bean.User">
+        select <include refid="findle"></include> from user_copy;
+    </select>
+    <select id="getUserByID" resultType="c.z.bean.User">
+        select <include refid="findle"></include> from user_copy
+        <where>
+            res=0
+            <if test="id!=null and id!=''">
+                and id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="findUserByName" resultType="c.z.bean.User">
+        select <include refid="findle"></include> from user_copy
+        <where>
+            res=0
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+    <select id="findUserByIDorName" resultType="c.z.bean.User">
+        select <include refid="findle"></include> from user_copy
+        <where>
+            res=0
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+            <if test="id!=null and id !=''">
+                or id=#{id}
+            </if>
+        </where>
+    </select>
+    <select id="getUserCount" resultType="java.lang.Integer">
+        select count(1) from user_copy where res=0
+    </select>
+</mapper>

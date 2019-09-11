@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>fileList</title>
+</head>
+<body>
+
+<div class="layui-container">
+    <table class="layui-table layui-text">
+        <colgroup>
+            <col width="150">
+            <col>
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="150">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>文件名</th>
+            <th>编辑</th>
+            <th>备用</th>
+            <th>编辑</th>
+            <th>备用</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>首页</td>
+            <td><a href="" target="_blank">index.html</a></td>
+            <td>
+                <a href="" class="layui-btn layui-btn-sm" style="background-color: #f0ada0">删除</a>
+            </td>
+            <td>
+                <a href="" class="layui-btn layui-btn-sm layui-btn-warm" style="background-color: #dddddd
+
+">备用</a>
+            </td>
+            <td>
+                <a href="" class="layui-btn layui-btn-sm layui-btn-warm" style="background-color: #dddddd
+
+">备用</a>
+            </td>
+            <td>
+                <a href="" class="layui-btn layui-btn-sm layui-btn-warm" style="background-color: #dddddd
+
+">备用</a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+    <link rel="stylesheet" href="../res/layui/css/layui.css">
+    <link rel="stylesheet" href="../res/static/css/mian.css">
+    <script src="../res/layui/layui.js"></script>
+    <script src="../res/layui/jquery-3.4.1.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                url: "/web4/user/index/html",
+                type: "post",
+                dataType: "json",
+                success: function (mess) {
+                    console.log(mess);
+                },
+                error: function () {
+                    alert("error");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

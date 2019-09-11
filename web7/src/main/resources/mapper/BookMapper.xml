@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mapper.BookMapper">
+    <resultMap id="BaseResultMap" type="cn.itcast.model.Book">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="book_id" jdbcType="INTEGER" property="bookid"/>
+        <result column="book_name" jdbcType="VARCHAR" property="bookname"/>
+        <result column="type_id" jdbcType="INTEGER" property="typeid"/>
+        <result column="book_status" jdbcType="TINYINT" property="bookstatus"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createtime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updatetime"/>
+        <result column="book_press" jdbcType="VARCHAR" property="press"/>
+        <result column="book_number" jdbcType="INTEGER" property="booknumber"/>
+        <result column="bookauthor" jdbcType="VARCHAR" property="bookauthor"/>
+        <result column="book_description" jdbcType="LONGVARCHAR" property="bookdescription"/>
+    </resultMap>
+    <sql id="fields">
+            `book_id` bookid,
+            `book_name` bookname,
+            `book_number` booknumber,
+            `bookauthor` bookauthor,
+            `book_press` press,
+            `book_description` bookdescription,
+            `book_status` bookstatus,
+            `create_time` createtime,
+            `update_time` updatetime,
+            `type_id` typeid
+    </sql>
+    <insert id="saveObject" keyColumn="book_id" keyProperty="bookid" useGeneratedKeys="true">
+        insert into `book`
+        <trim prefix="(" prefixOverrides="," suffix=")">
+            <if test="bookname!=null">
+                `book_name`,
+            </if>
+            <if test="bookauthor!=null">
+                `bookauthor`,
+            </if>
+            <if test="booknumber!=null">
+                `book_number`,
+            </if>
+            <if test="press!=null">
+                `book_press`,
+            </if>
+            <if test="bookdescription!=null">
+                `book_description`,
+            </if>
+            <if test="createtime!=null">
+                `create_time`,
+            </if>
+            <if test="updatetime!=null">
+                `update_time`,
+            </if>
+            `type_id`
+        </trim>
+        <trim prefix="values (" prefixOverrides="," suffix=")">
+            <if test="bookname!=null">
+                #{bookname},
+            </if>
+            <if test="bookauthor">
+                #{bookauthor},
+            </if>
+            <if test="booknumber!=null">
+                #{booknumber},
+            </if>
+            <if test="press!=null">
+                #{press},
+            </if>
+            <if test="bookdescription!=null">
+                #{bookdescription},
+            </if>
+            <if test="createtime!=null">
+                #{createtime},
+            </if>
+            <if test="updatetime!=null">
+                #{updatetime},
+            </if>
+            1
+        </trim>
+    </insert>
+    <resultMap id="defaultResult" type="cn.itcast.model.Book">
+        <id column="bookid" property="bookid"/>
+        <result column="bookname" property="bookname"/>
+        <result column="booknumber" property="booknumber"/>
+        <result column="bookauthor" property="booknumber"/>
+        <result column="press" property="press"/>
+        <result column="book_description" property="bookdescription"/>
+        <result column="book_status" property="bookstatus"/>
+        <result column="createtime" property="createtime"/>
+        <result column="updatetime" property="updatetime"/>
+        <result column="type_id" property="typeid"/>
+        <association column="type_id" property="bookType" select="cn.itcast.mapper.BookTypeMapper.findByID"/>
+        <!--&lt;association property="type" select="cn.itcast.mapper.BookTypeMapper.findByID" column="type_id"
+                     fetchType="lazy" resultMap="defaultResult"&gt;
+            &lt;id column="id" property="id"/&gt;
+            &lt;result column="name" property="name"/&gt;
+            &lt;result column="status" property="status"/&gt;
+            &lt;result column="createtime" property="createtime"/&gt;
+            &lt;result column="updatetime" property="updatetime"/&gt;
+        &lt;/association&gt;-->
+    </resultMap>
+
+
+    <insert id="saveBatchObject"/>
+    <delete id="deleteByID"/>
+    <delete id="deleteByObject"/>
+
+    <select id="findAll" resultType="cn.itcast.model.Book">
+        select
+        <include refid="fields"/>
+        from `book` where `book_status`=0 order by `book_id` asc
+    </select>
+    <select id="count" resultType="integer">
+        select count(1) `count` from `book` where `book_status`=0
+    </select>
+    <select id="findByID" resultMap="defaultResult" resultType="cn.itcast.model.Book">
+        select
+        <include refid="fields"/>
+        from `book`
+        <where>
+            `book_status` =0
+            <choose>
+                <when test="id!=null">
+                    and `book_id`=#{id}
+                </when>
+                <otherwise>
+                    and 1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="findByName" resultType="cn.itcast.model.Book">
+        select
+        <include refid="fields"/>
+        from `book`
+        <where>
+            `book_status` =0
+            <choose>
+                <when test="name!=null">
+                    and `book_name` like #{name}
+                </when>
+                <otherwise>
+                    and 1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+</mapper>

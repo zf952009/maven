@@ -1,0 +1,30 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="c.z.dao.FileListDao">
+    <sql id="filed">id id,name name,url url,res res</sql>
+    <resultMap id="fileListAndUser" type="c.z.bean.FileList">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="res" column="res"/>
+        <result property="url" column="url"/>
+        <result property="type" column="type"/>
+        <collection property="list" ofType="c.z.bean.User">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="password" column="password"/>
+            <result property="res" column="res"/>
+        </collection>
+
+    </resultMap>
+
+    <select id="getFileListAll" resultType="c.z.bean.FileList">
+        select <include refid="filed"></include> from tb_file_list_copy where res=0 order by id asc
+    </select>
+    <select id="getFileListUserAll" resultMap="fileListAndUser">
+       select filelist.id,filelist.name name,filelist.url url,filelist.res res,filelist.type type
+       from tb_file_list_copy filelist left join user_copy user
+       on filelist.type=user.id
+       where filelist.type=user.id and filelist.res=0
+    </select>
+
+</mapper>

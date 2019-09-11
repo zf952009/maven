@@ -1,0 +1,67 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mapper.BookTypeMapper">
+    <sql id="fields">
+        `id` id,
+        `name` name,
+        `book_type_status` status,
+        `create_time` createtime,
+        `update_time` updatetime
+    </sql>
+    <resultMap id="default" type="cn.itcast.model.BookType">
+        <id property="id" column="id"/>
+        <result column="name" property="name"/>
+        <result column="status" property="status"/>
+        <result column="createtime" property="createtime"/>
+        <result column="updatetime" property="updatetime"/>
+        <!--<collection property="bookList" column="id" select="cn.itcast.mapper.BookMapper.findByID" >
+            <id column="" />
+        </collection>-->
+    </resultMap>
+
+
+    <insert id="saveObject" keyProperty="id" useGeneratedKeys="true" keyColumn="id"
+            parameterType="cn.itcast.model.BookType">
+        insert into `book_type`
+        <trim prefix="(" suffix=")" prefixOverrides=",">
+            <if test="name!=null">
+                `name`,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" prefixOverrides=",">
+            <if test="name!=null">
+                #{name}
+            </if>
+        </trim>
+    </insert>
+    <insert id="saveBatchObject"></insert>
+    <delete id="deleteByObject"></delete>
+    <delete id="deleteByID"></delete>
+
+    <select id="findAll" resultType="cn.itcast.model.BookType">
+        select
+        <include refid="fields"/>
+        from `book_type`
+        where `book_type_status` =0
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(1) from `book_type` where `book_type_status`=0
+    </select>
+    <select id="findByID" resultType="cn.itcast.model.BookType">
+        select
+        <include refid="fields"/>
+        from `book_type`
+        <where>
+            `book_type_status` =0
+            <choose>
+                <when test="id!=null">
+                    and `id`=#{id}
+                </when>
+                <otherwise>
+                    and 1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="findByName" resultType="cn.itcast.model.BookType"></select>
+</mapper>

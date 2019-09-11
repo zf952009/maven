@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--注解扫描-->
+    <context:component-scan base-package="z.f"></context:component-scan>
+
+    <!--数据路信息导入-->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!--c3p0连接池-->
+    <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" name="dataSource">
+        <property name="jdbcUrl" value="${mysql.url}"/>
+        <property name="driverClass" value="${mysql.driver}"/>
+        <property name="user" value="${mysql.user}"/>
+        <property name="password" value="${mysql.password}"/>
+    </bean>
+    <!--配置sessionFactory-->
+    <!--<bean class="org.springframework.orm.hibernate5.LocalSessionFactoryBean" name="sessionFactory">
+        <property name="dataSource" ref="dataSource"/>
+        &lt;!&ndash;导入orm元数据，指定orm元数据所在的路径，spring会自动读取包中的所有配置&ndash;&gt;
+        <property name="mappingDirectoryLocations" value="classpath:z/f/bean"></property>
+        &lt;!&ndash;配置hibernate配置&ndash;&gt;
+        <property name="hibernateProperties">
+            <props>
+                &lt;!&ndash;数据库方言，必选&ndash;&gt;
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                &lt;!&ndash;自动建表(可选)&ndash;&gt;
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                &lt;!&ndash;显示sql语句(可选)&ndash;&gt;
+                <prop key="hibernate.show_sql">true</prop>
+                &lt;!&ndash;格式化sql(可选)&ndash;&gt;
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.current_session_context_class">
+                    org.springframework.orm.hibernate5.SpringSessionContext
+                </prop>
+            </props>
+        </property>
+    </bean>-->
+
+
+    <!--userService 注册-->
+    <bean class="z.f.service.impl.UserServiceImpl" name="userService"></bean>
+    <!--userAction注册-->
+    <bean class="z.f.action.UserAction" name="userAction" scope="prototype">
+        <property name="userService" ref="userService"/>
+    </bean>
+    <!--dao注册-->
+    <!--<bean class="z.f.dao.impl.UserDaoImpl" name="userDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>-->
+</beans>

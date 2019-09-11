@@ -1,0 +1,123 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mapper.spring.UserMapper">
+    <sql id="fileds">
+        user_id user_id,
+        user_name user_name,
+        user_password user_password,
+        user_type user_type,
+        user_status user_status,
+        create_time create_time,
+        update_time update_time
+    </sql>
+
+    <select id="selectUserAll" resultType="cn.itcast.model.spring.User">
+        select
+        <include refid="fileds"/>
+        from user where user_status=0
+    </select>
+    <select id="getUserByID" resultType="cn.itcast.model.spring.User">
+        select * from user
+        <where>
+            user_status=0
+            <if test="id!=null and ''!=id">
+                and user_id=#{id}
+            </if>
+        </where>
+    </select>
+
+    <resultMap id="res1" type="cn.itcast.model.spring.User">
+        <id property="user_id" column="uid"/>
+        <result property="user_password" column="upassword"/>
+        <result property="user_name" column="uname"/>
+        <result property="user_status" column="ustatus"/>
+        <result property="user_type" column="utype"/>
+        <result property="update_time" column="utime"/>
+        <result property="create_time" column="ctime"/>
+        <!--嵌套结果集的方式，封装到list集合中-->
+        <collection property="list" ofType="cn.itcast.model.spring.FileList">
+            <id column="fid" property="id"/>
+            <result property="name" column="fname"/>
+            <result property="url" column="furl"/>
+            <result property="type" column="ftype"/>
+            <result property="status" column="fstatus"/>
+            <result property="update_time" column="fctime"/>
+            <result property="create_time" column="futime"/>
+            <result property="user_id" column="fuid"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="res2" type="cn.itcast.model.spring.User">
+        <id property="user_id" column="uid"/>
+        <result property="user_password" column="upassword"/>
+        <result property="user_name" column="uname"/>
+        <result property="user_status" column="ustatus"/>
+        <result property="user_type" column="utype"/>
+        <result property="update_time" column="utime"/>
+        <result property="create_time" column="ctime"/>
+        <!--分步查询，结果封装到list集合中 ，默认使用了延迟加载 fetchType="lazy"延迟加载属性-->
+        <collection property="list" select="cn.itcast.mapper.spring.FileListMapper.getFileListByUserID" column="uid"
+                    fetchType="lazy"/>
+    </resultMap>
+
+    <!--鉴别器测试结果集，********仅用于测试******-->
+    <resultMap id="res3Test" type="cn.itcast.model.spring.User">
+        <discriminator javaType="string" column="uname">
+            <case value="邹芳" resultType="cn.itcast.model.spring.User">
+                <id property="user_id" column="uid"/>
+                <result property="user_password" column="upassword"/>
+                <result property="user_name" column="uname"/>
+                <result property="user_status" column="ustatus"/>
+                <result property="user_type" column="utype"/>
+                <result property="update_time" column="utime"/>
+                <result property="create_time" column="ctime"/>
+            </case>
+            <case value="user" resultType="cn.itcast.model.spring.User">
+                <id property="user_id" column="uid"/>
+                <result property="user_password" column="upassword"/>
+                <!--这里将upassWord封装到了user_name属性中，仅用于测试鉴别器，没有实际意义-->
+                <result property="user_name" column="upassword"/>
+                <result property="user_status" column="ustatus"/>
+                <result property="user_type" column="utype"/>
+                <result property="update_time" column="utime"/>
+                <result property="create_time" column="ctime"/>
+            </case>
+        </discriminator>
+    </resultMap>
+
+
+    <select id="getUserByIDAndFileList" resultMap="res2">
+        SELECT
+            `user`.user_id uid,
+            `user`.create_time ctime,
+            `user`.update_time utime,
+            `user`.user_name uname,
+            `user`.user_password upassword,
+            `user`.user_status ustatus,
+            `user`.user_type utype,
+            filelist.filelist_id fid,
+            filelist.filelist_name fname,
+            filelist.filelist_url furl,
+            filelist.filelist_type ftype,
+            filelist.filelist_status fstatus,
+            filelist.create_time fctime,
+            filelist.update_time futime,
+            filelist.user_id fuid
+
+        FROM
+            `user` `user` LEFT JOIN filelist filelist
+        on `user`.user_id = filelist.user_id
+        where `user`.user_status=0 and filelist.filelist_status = 0
+    </select>
+    <select id="discriminatorByIDTest" resultMap="res3Test">
+        SELECT
+            `user`.user_id uid,
+            `user`.create_time ctime,
+            `user`.update_time utime,
+            `user`.user_name uname,
+            `user`.user_password upassword,
+            `user`.user_status ustatus,
+            `user`.user_type utype
+            from `user` `user` where user_id=#{id} and user_status=0
+    </select>
+</mapper>

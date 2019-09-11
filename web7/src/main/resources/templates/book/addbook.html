@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>添加书籍</title>
+    <link rel="stylesheet" charset="UTF-8" href="/layui/css/layui.css">
+    <link rel="stylesheet" charset="UTF-8" href="/layui/css/global.css">
+    <script charset="UTF-8" rel="script" src="/layui/layui.js"></script>
+</head>
+<body>
+<div class="layui-container"
+     style="margin-top: 10px;margin-bottom:50px;width: 700px; border: 1px #F6F6F6 solid;background-color: #ffffff">
+    <form class="layui-form layui-form-pane" action="/book/doAddBook" method="post">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+            <legend>添加书籍</legend>
+        </fieldset>
+        <div class="layui-form-item">
+            <label class="layui-form-label">书名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bookname" autocomplete="off" lay-verify="required"
+                       placeholder="书名 ..." class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">作者</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bookauthor" autocomplete="off" lay-verify="required"
+                       placeholder="作者 ..." class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">出版社</label>
+            <div class="layui-input-inline">
+                <input type="text" name="press" autocomplete="off" lay-verify="required"
+                       placeholder="出版社 ..." class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">数量</label>
+            <div class="layui-input-inline">
+                <input type="number" value="1" min="1" name="booknumber" autocomplete="off" lay-verify="required"
+                       placeholder="书名 ..." class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">上架时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test" name="createtime" autocomplete="off"
+                           placeholder="yyyy-MM-dd HH:mm:ss">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">更新时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="test5" name="updatetime" autocomplete="off"
+                           placeholder="yyyy-MM-dd HH:mm:ss">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">书本简介</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea" lay-verify="required"
+                          name="bookdescription"></textarea>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-submit="" lay-filter="demo2">提交</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    layui.use(['laydate', 'layer'], function () {
+        var laydate = layui.laydate
+            , layer = layui.layer;
+
+        laydate.render({
+            elem: '#test5'
+            , type: 'datetime'
+            , theme: '#393D49'
+            , format: 'yyyy:MM:dd HH:mm:ss'
+        });
+        laydate.render({
+            elem: '#test'
+            , type: 'datetime'
+            , theme: '#393D49'
+            , format: 'yyyy:MM:dd HH:mm:ss'
+        });
+    });
+
+</script>
+</body>
+</html>

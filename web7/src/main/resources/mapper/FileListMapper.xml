@@ -1,0 +1,60 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mapper.FileListMapper">
+    <sql id="fileds">
+        filelist_id id,
+        filelist_name name,
+        filelist_url url,
+        filelist_type type,
+        filelist_status status,
+        create_time create_time,
+        update_time update_time,
+        user_id user_id
+    </sql>
+    <insert id="save" keyProperty="id" useGeneratedKeys="true" keyColumn="filelist_id">
+        insert into `filelist`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name!=null and ''!=name">
+                `filelist_name`,
+            </if>
+            <if test="name!=null and ''!=name">
+                `filelist_url`,
+            </if>
+            `filelist_type`,
+            `filelist_status`
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name!=null and ''!=name">
+                #{name},
+            </if>
+            <if test="name!=null and ''!=name">
+                #{url},
+            </if>
+            0,
+            0,
+        </trim>
+
+    </insert>
+    <insert id="saveBatch" keyColumn="filelist_id" useGeneratedKeys="true" keyProperty="id">
+        insert into `filelist`(`filelist_name`,`filelist_url`,`filelist_type`,`filelist_status`)
+        values
+        <foreach collection="list" item="itme" separator=",">
+            (#{itme.name},#{itme.url},0,0)
+        </foreach>
+    </insert>
+    <select id="findFileListAll" resultType="cn.itcast.model.FileList">
+        select
+        <include refid="fileds"/>
+        from filelist where filelist_status=0
+    </select>
+    <select id="findFileListPage" resultType="cn.itcast.model.FileList">
+        SELECT
+        <include refid="fileds"/>
+        FROM filelist
+        where filelist_status=0
+        ORDER BY filelist_id LIMIT #{statur},#{number};
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from filelist where filelist_status=0
+    </select>
+</mapper>

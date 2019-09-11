@@ -1,0 +1,77 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mapper.UserMapper">
+    <sql id="fileds">user_name username,user_id userid,user_password userpassword,user_type usertype, user_status userstatus,create_time crestetime,update_time updatetime</sql>
+    <insert id="insertUserOne" useGeneratedKeys="true" keyColumn="user_id" keyProperty="userid">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="username!=null and ''!=username">
+                user_name,
+            </if>
+            <if test="userpassword!=null and ''!=userpassword">
+                user_password,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="username!=null and ''!=username">
+                #{username},
+            </if>
+            <if test="userpassword!=null and ''!=userpassword">
+                #{userpassword},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertUserBatch">
+        insert into `user`(user_name,user_password) values
+        <foreach collection="list" item="itme" separator=",">
+            (#{itme.username},#{itme.userpassword})
+        </foreach>
+    </insert>
+    <update id="updateUserByObject">
+        update user
+        <set>
+            <if test="username!=null">
+                user_name=#{username},
+            </if>
+            <if test="userpassword!=null and ''!=userpassword">
+                user_password=#{userpassword},
+            </if>
+        </set>
+        where user_id=#{userid}
+    </update>
+
+    <select id="findUserAll" resultType="cn.itcast.model.User">
+        select
+        <include refid="fileds"/>
+        from user where user_status=0
+    </select>
+    <select id="findUserByID" resultType="cn.itcast.model.User">
+        select
+        <include refid="fileds"/>
+        from user where user_status=0 and user_id=#{userid}
+    </select>
+    <select id="findUserByName" resultType="cn.itcast.model.User">
+        select
+        <include refid="fileds"/>
+        from user where user_status=0 and user_name=#{username}
+    </select>
+    <select id="findUserByObject" resultType="cn.itcast.model.User">
+        select
+        <include refid="fileds"/>
+        from user
+        <where>
+            user_status=0
+            <choose>
+                <when test="userid!=null and username!=null">
+                    and user_id=#{userid}
+                </when>
+                <when test="username!=null">
+                    and user_name like concat('%',#{username},'%')
+                </when>
+                <otherwise>
+                    and 1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+</mapper>

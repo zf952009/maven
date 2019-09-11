@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="config/ehcache.xsd">
+    <diskStore path="D\\ehcache\\"/>
+    <defaultCache>
+        timeToIdleSeconds="3600"<!--1 hour-->
+        timeToLiveSeconds="3600"<!--1 hour-->
+        maxEntriesLocalHeap="1000"
+        maxEntriesLocalDisk="10000000"
+        memoryStoreEvictionPolicy="LRU"
+    </defaultCache>
+</ehcache>

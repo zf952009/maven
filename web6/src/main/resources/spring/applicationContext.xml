@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--开启注解扫描-->
+    <context:component-scan base-package="cn.itcast">
+        <!--不扫描controller注解-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--加载数据库配置文件-->
+    <context:property-placeholder location="classpath:config/db.properties"/>
+
+    <!--配置阿里数据源-->
+    <bean class="com.alibaba.druid.pool.DruidDataSource" id="druidDataSource" init-method="init" destroy-method="close">
+        <!--基本配置-->
+        <property name="url" value="${mysql2.url}"/>
+        <property name="driverClassName" value="${mysql.drivername}"/>
+        <property name="username" value="${mysql.username}"/>
+        <property name="password" value="${mysql.password}"/>
+
+        <!--配置初始化大小，最大，最小-->
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="20"/>
+
+        <!--连接等待超时时间-->
+        <property name="maxWait" value="60000"/>
+
+        <!--配置间隔多久进行一次检测-->
+        <property name="timeBetweenEvictionRunsMillis" value="2000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="600000" />
+        <property name="maxEvictableIdleTimeMillis" value="900000" />
+
+        <property name="validationQuery" value="select 1" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+
+        <property name="keepAlive" value="true" />
+        <property name="phyMaxUseCount" value="1000" />
+
+        <!-- 配置监控统计拦截的filters -->
+        <property name="filters" value="druid" />
+
+    </bean>
+
+    <!--配置数据源-->
+    <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" id="dataSource">
+        <property name="jdbcUrl" value="${mysql2.url}"/>
+        <property name="driverClass" value="${mysql.drivername}"/>
+        <property name="user" value="${mysql.username}"/>
+        <property name="password" value="${mysql.password}"/>
+    </bean>
+
+    <!--配置SQLSessionFactory工厂-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sessionFactory">
+        <property name="dataSource" ref="druidDataSource"/>
+        <!--配置外部mybatis核心配置-->
+        <property name="configLocation" value="classpath:config/mybatis-config.xml"/>
+        <!--mapper扫描-->
+        <property name="mapperLocations" value="classpath*:mapper/spring/*.xml"/>
+    </bean>
+    <!--配置接口包-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer" id="mapperScannerConfigurer">
+        <property name="basePackage" value="cn.itcast.mapper"/>
+    </bean>
+
+    <!--配置spring 事务-->
+    <!--配置事务管理器-->
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+        <property name="dataSource" ref="druidDataSource"/>
+    </bean>
+    <!--配置事务通知-->
+    <tx:advice id="transactionInterceptor" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="save*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="persist*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="update*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="modify*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="delete*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="remove*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false"/>
+            <tx:method name="get*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="true"/>
+            <tx:method name="find*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- 配置将通知织入目标对象
+   配置切点
+   配置切面 -->
+    <aop:config>
+        <aop:pointcut expression="execution(* cn.itcast.service.*.*ServiceImpl.*(..))" id="txPc"/>
+        <aop:advisor advice-ref="transactionInterceptor" pointcut-ref="txPc"/>
+    </aop:config>
+
+</beans>

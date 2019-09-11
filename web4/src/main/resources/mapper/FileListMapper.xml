@@ -1,0 +1,157 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="z.f.mapper.FileListMapper">
+    <sql id="files">id,name,url,res</sql>
+
+    <!--单条添加insertFileListOne-->
+    <insert id="insertFileListOne" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        insert into tb_file_list_copy
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name!=null and ''!=name">
+                name,
+            </if>
+            <if test="name!=null and ''!=name">
+                url,
+            </if>
+            res,
+            type
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name!=null and ''!=name">
+                #{name},
+            </if>
+            <if test="name!=null and ''!=name">
+                #{url},
+            </if>
+            0,
+            1,
+        </trim>
+    </insert>
+
+    <!--批量添加，添加多条数据 insertFileLiestList-->
+    <insert id="insertFileListList" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        insert into tb_file_list_copy(name,url,res,type) values
+        <foreach collection="list" item="itme" separator=",">
+            (#{itme.name},#{itme.url},0,1)
+        </foreach>
+    </insert>
+
+    <!--查询所有数据 getFileListAll-->
+    <select id="getFileListAll" resultType="z.f.bean.FileList">
+        select
+        <include refid="files"/>
+        from tb_file_list_copy where res=0
+    </select>
+
+    <!--根据id查询 findFileListBYID-->
+    <select id="findFileListBYID" resultType="z.f.bean.FileList">
+        select
+        <include refid="files"/>
+        from tb_file_list_copy
+        <where>
+            <choose>
+                <when test="id!=null and ''!=id">
+                    res=0 and id=#{id}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--根据id或者name查询，id不能为空就按id查询，name模糊查询 findFileListBYIDorNname-->
+    <select id="findFileListBYIDorNname" resultType="z.f.bean.FileList">
+        select
+        <include refid="files"/>
+        from tb_file_list_copy
+        <where>
+            res=0
+            <choose>
+                <when test="id!=null and name!=null">
+                    and id=#{id}
+                </when>
+                <when test="id!=null and ''!=id">
+                    and id=#{id}
+                </when>
+                <when test="name!=null and ''!=name">
+                    and name like conncat('%',name,'%')
+                </when>
+                <otherwise>
+                    and 1=2
+                </otherwise>
+            </choose>
+        </where>
+
+    </select>
+
+    <!--根据name模糊查询 findFileListBYName-->
+    <select id="findFileListBYName" resultType="z.f.bean.FileList">
+        select
+        <include refid="files"/>
+        from tb_file_list_copy
+        <where>
+            <choose>
+                <when test="name!=null and ''!=name">
+                    res=0 and name like concat('%',#{name},'%')
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--根据id和name精确查询 findFileListByIDandName-->
+    <select id="findFileListByIDandName" resultType="z.f.bean.FileList">
+        select
+        <include refid="files"/>
+        from tb_file_list_copy
+        <where>
+            <choose>
+                <when test="id!=null and name!=null and ''!=id and ''!=name">
+                    res=0 and id=#{id} and name=#{name}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <!--根据name精确查询 getFileListByName-->
+    <select id="getFileListByName" resultType="z.f.bean.FileList">
+        select
+        <include refid="files"/>
+        from tb_file_list_copy
+        <where>
+            <choose>
+                <when test="name!=null and ''!=name">
+                    res=0 and name =#{name}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+        </where>
+
+    </select>
+
+    <!--分页查询，待实现 findFileListPages-->
+    <select id="findFileListPages" resultType="z.f.bean.FileList">
+        select
+        <include refid="files"/>
+        from tb_file_list_copy
+        <where>
+            <choose>
+                <when test="pagenumber!=null and ''!=pagenumber and statr!=null and ''!=statr">
+                    res=0 limit #{statr},#{pagenumber}
+                </when>
+                <otherwise>
+                    1=2
+                </otherwise>
+            </choose>
+
+        </where>
+    </select>
+</mapper>

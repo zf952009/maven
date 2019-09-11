@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.dao.ProductCategoryDao">
+    <insert id="insert"></insert>
+    <update id="updateById"></update>
+    <delete id="deleteById"></delete>
+
+    <select id="findAll" resultType="cn.itcast.dataobject.ProductCategory">
+        select `category_id` categoryId,`category_name` categoryName,`category_type` categoryType from product_category
+    </select>
+    <select id="findByID" resultType="cn.itcast.dataobject.ProductCategory">
+        select `category_id` categoryId,`category_name` categoryName,`category_type` categoryType from product_category where category_id=#{id}
+    </select>
+</mapper>

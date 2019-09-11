@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>booklist</title>
+    <link rel="stylesheet" charset="UTF-8" href="/layui/css/layui.css">
+    <link rel="stylesheet" charset="UTF-8" href="/layui/css/global.css">
+    <script charset="UTF-8" rel="script" src="/layui/layui.js"></script>
+    <script>
+        layui.use(['layer', 'jquery', 'laydate'], function () {
+            var $ = layui.jquery
+                , layer = layui.layer
+                , laydate = layui.laydate;
+            $(document).ready(function () {
+                $.ajax({
+                    url: "/book/doBookList",
+                    type: "post",
+                    dataType: "json",
+                    success: function (messge) {
+                        $("#count").html(messge.length);
+                        for (var i = 0; i < messge.length; i++) {
+                            var data = messge[i];
+                            console.log(data);
+                            $("#boby").append("<tr>" +
+                                "<td>  " + data.bookid + "</td>" +
+                                "<td>  " + data.bookid + "</td>" +
+                                "<td>  " + data.bookname + "</td>" +
+                                "<td>  " + data.bookauthor + "</td>" +
+                                "<td>  " + data.press + "</td>" +
+                                "<td>  " + data.booknumber + "</td>" +
+                                "<td>  " + data.createtime + "</td>" +
+                                "<td>  " + data.updatetime + "</td>" +
+                                "<td>  " + data.bookdescription + "</td>" +
+                                "<td>  " + data.bookid + "</td>" +
+                                "</tr>");
+                        }
+                        console.log(messge);
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</head>
+<body>
+<div class="layui-container"
+     style="margin-top: 10px;margin-bottom:50px;width: 100%; border: 1px #F6F6F6 solid;background-color: #ffffff">
+    <h4 id="count" style="color: red"></h4>
+
+    <table class="layui-table" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="60"/>
+            <col width="50"/>
+            <col width="100"/>
+            <col width="100"/>
+            <col width="100">
+            <col width="60">
+            <col width="150">
+            <col width="150">
+            <col width="300">
+            <col width="100">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>选择</th>
+            <th>id</th>
+            <th>书名</th>
+            <th>作者</th>
+            <th>出版社</th>
+            <th>数量</th>
+            <th>上架时间</th>
+            <th>更新时间</th>
+            <th>书籍简介</th>
+            <th>操作</th>
+        </tr>
+
+        </thead>
+
+        <tbody id="boby">
+
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

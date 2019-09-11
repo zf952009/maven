@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>网站列表</title>
+    <link rel="stylesheet" charset="UTF-8" href="/layui/css/layui.css">
+    <script charset="UTF-8" rel="script" src="/layui/layui.js"></script>
+    <script>
+        layui.use(['jquery', 'layer', 'table'], function () {
+            var $ = layui.jquery
+                , layer = layui.layer
+                , table = layui.table;
+
+        });
+    </script>
+</head>
+<body>
+<h1 style="position: absolute; width:100%; text-align: center; top: 20px; left: 0; font-size: 20px; color: #333;">
+    网站列表
+</h1>
+
+<div class="layui-container">
+    <table class="layui-table layui-text">
+        <colgroup>
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col width="150">
+            <col>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>页面</th>
+            <th>文件</th>
+            <th>页面</th>
+            <th>文件</th>
+            <th>页面</th>
+            <th>文件</th>
+            <th>页面</th>
+            <th>文件</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>booklist</td>
+            <td><a href="/book/list" target="_blank">booklist.html</a></td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+        <tr>
+            <td>邮件发送界面</td>
+            <td><a href="/mail/index" target="_blank">mailindex.html</a></td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+        <tr>
+            <td>userlisr</td>
+            <td><a href="/user/userlist" target="_blank">userlist.html</a></td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+        <tr>
+            <td>from</td>
+            <td><a href="/user/from" target="_blank">from.html</a></td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+        <tr>
+            <td>user/index</td>
+            <td><a href="/user/index" target="_blank">user/index</a></td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+        <tr>
+            <td>user/login</td>
+            <td><a href="/user/login" target="_blank">user/login</a></td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+            <td>test</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

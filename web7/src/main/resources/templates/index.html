@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" charset="UTF-8" href="/layui/css/layui.css">
+    <script charset="UTF-8" rel="script" src="/layui/layui.js"></script>
+    <script>
+        layui.use(['jquery', 'layer'], function () {
+            var $ = layui.jquery
+                , layer = layui.layer;
+            $(document).ready(function () {
+                console.log("springboot run ...");
+                $.ajax({
+                    url: '/user/from',
+                    data: {
+                        "username": "ceshi",
+                        "userpassword": 123456
+                    },
+                    type: 'post',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<h3>springboot index run ...</h3>
+
+<table>
+    <tr>
+        <td>name</td>
+        <td>password</td>
+    </tr>
+    <tr th:each="itme : ${data}">
+        <td th:text="${itme.username}"></td>
+        <td th:text="${itme.userpassword}"></td>
+    </tr>
+
+</table>
+
+
+</body>
+</html>

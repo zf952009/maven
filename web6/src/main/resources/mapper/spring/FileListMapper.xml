@@ -1,0 +1,154 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mapper.spring.FileListMapper">
+
+<!--    <cache type="org.mybatis.caches.ehcache.EhBlockingCache"></cache>-->
+    <sql id="default-field">
+        filelist_id `id`,
+        filelist_name `name`,
+        filelist_url `url`,
+        filelist_type `type`,
+        filelist_status `status`,
+        create_time `create_time`,
+        update_time `update_time`,
+        user_id `user_id`
+    </sql>
+    <resultMap id="default-map" type="cn.itcast.model.spring.FileList">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="status" column="status"/>
+        <result property="url" column="url"/>
+        <result property="type" column="type"/>
+        <result property="user_id" column="user_id"/>
+        <result property="create_time" column="create_time"/>
+        <result property="update_time" column="update_time"/>
+    </resultMap>
+
+
+    <!--复杂查询份封装-->
+    <resultMap id="fileListDBAndUserDB" type="cn.itcast.model.spring.FileList">
+        <id column="fid" property="id"/>
+        <result column="fname" property="name"/>
+        <result column="furl" property="url"/>
+        <result column="ftype" property="type"/>
+        <result column="fstatus" property="status"/>
+        <result column="fctime" property="create_time"/>
+        <result column="futime" property="update_time"/>
+        <!--使用级联属性封装数据-->
+        <result column="uid" property="user.user_id"/>
+        <result column="uname" property="user.user_name"/>
+        <result column="upassword" property="user.user_password"/>
+        <result column="ustatus" property="user.user_status"/>
+        <result column="utype" property="user.user_type"/>
+        <result column="uctime" property="user.create_time"/>
+        <result column="uutime" property="user.update_time"/>
+    </resultMap>
+
+    <resultMap id="fileListDBAndUserDB2" type="cn.itcast.model.spring.FileList">
+        <id column="fid" property="id"/>
+        <result column="fname" property="name"/>
+        <result column="furl" property="url"/>
+        <result column="ftype" property="type"/>
+        <result column="fstatus" property="status"/>
+        <result column="fctime" property="create_time"/>
+        <result column="futime" property="update_time"/>
+
+        <!--
+        使用association封装
+        property：【必须】需要封装的属性名
+        javaType：【必须】需要封装的属性类型
+        -->
+        <association property="user" javaType="cn.itcast.model.spring.User">
+            <result column="uid" property="user_id"/>
+            <result column="uname" property="user_name"/>
+            <result column="upassword" property="user_password"/>
+            <result column="ustatus" property="user_status"/>
+            <result column="utype" property="user_type"/>
+            <result column="uctime" property="create_time"/>
+            <result column="uutime" property="update_time"/>
+        </association>
+    </resultMap>
+
+
+    <sql id="fileds">
+        filelist_id id,
+        filelist_name name,
+        filelist_url url,
+        filelist_type type,
+        filelist_status status,
+        create_time create_time,
+        update_time update_time,
+        user_id user_id
+    </sql>
+    <sql id="filedsName">
+            filelist.filelist_id fid,
+			filelist.filelist_name fname,
+			filelist.filelist_url furl,
+			filelist.filelist_type ftype,
+			filelist.filelist_status fstatus,
+			filelist.create_time fctime,
+			filelist.update_time futime,
+			filelist.user_id fuid
+    </sql>
+    <sql id="fileLsitAndUserFileds">
+            filelist.filelist_id fid,
+			filelist.filelist_name fname,
+			filelist.filelist_url furl,
+			filelist.filelist_type ftype,
+			filelist.filelist_status fstatus,
+			filelist.create_time fctime,
+			filelist.update_time futime,
+			filelist.user_id fuid,
+			`user`.user_id uid,
+			`user`.create_time uctime,
+			`user`.update_time uutime,
+			`user`.user_name uname,
+			`user`.user_password upassword,
+			`user`.user_status ustatus,
+			`user`.user_type utype
+    </sql>
+    <select id="selectFileListAll" resultType="cn.itcast.model.spring.FileList">
+        select
+        <include refid="fileds"/>
+        from filelist where filelist_status=0
+    </select>
+    <select id="selectFileListAndUserAll" resultMap="fileListDBAndUserDB3">
+        select
+        <include refid="fileLsitAndUserFileds"/>
+        from
+        filelist filelist,user user
+        where
+        filelist_status = 0
+        AND filelist.user_id = `user` .user_id
+    </select>
+    <!--分步查询封装结果集，结果集封装到对象中-->
+    <resultMap id="fileListDBAndUserDB3" type="cn.itcast.model.spring.FileList">
+        <id column="fid" property="id"/>
+        <result property="name" column="fname"/>
+        <result property="url" column="furl"/>
+        <result property="type" column="ftype"/>
+        <result property="status" column="fstatus"/>
+        <result property="update_time" column="fctime"/>
+        <result property="create_time" column="futime"/>
+        <result property="user_id" column="fuid"/>
+        <association property="user" select="cn.itcast.mapper.spring.UserMapper.getUserByID" column="fuid"
+                     fetchType="lazy"/>
+    </resultMap>
+    <!--分步查询-->
+    <select id="selectFileListAndUserAll1" resultMap="fileListDBAndUserDB3">
+        select
+        <include refid="filedsName"/>
+        from filelist filelist
+        where filelist_status=0
+    </select>
+    <select id="getFileListByID" resultType="cn.itcast.model.spring.FileList">
+        select
+        <include refid="fileds"/>
+        from filelist where filelist_status=0 and filelist_id=#{id}
+    </select>
+    <select id="getFileListByUserID" resultType="cn.itcast.model.spring.FileList">
+        select
+        <include refid="fileds"/>
+        from filelist where filelist_status=0 and user_id=#{user_id}
+    </select>
+</mapper>

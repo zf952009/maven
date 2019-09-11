@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>from</title>
+    <link rel="stylesheet" charset="UTF-8" href="/layui/css/layui.css">
+    <script charset="UTF-8" rel="script" src="/layui/layui.js"></script>
+    <script>
+        layui.use(['jquery', 'layer', 'table'], function () {
+            var $ = layui.jquery
+                , layer = layui.layer
+                , table = layui.table;
+
+        });
+    </script>
+</head>
+<body>
+
+<div class="layui-container">
+
+    <table class="layui-table" lay-even="" lay-skin="row">
+        <colgroup>
+            <col width="50"/>
+            <col width="50"/>
+            <col width="50"/>
+            <col width="50"/>
+        </colgroup>
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>用户名</th>
+            <th>密码</th>
+            <th>创建时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="itme : ${data}">
+            <td th:text="${itme.userid}">1</td>
+            <td th:text="${itme.username}">邹芳</td>
+            <td th:text="${itme.userpassword}">123456</td>
+            <td th:text="${itme.crestetime}">19971022</td>
+        </tr>
+        <tr th:each="itme : ${data1}">
+            <td th:text="${itme.id}"></td>
+            <td th:text="${itme.name}"></td>
+            <td th:text="${itme.create_time}"></td>
+            <td th:text="${itme.update_time}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.itcast.mapper.UserPlusMapper">
+ <!--   <insert id="insert"></insert>
+    <update id="updateById"></update>
+    <update id="update"></update>
+    <delete id="deleteById"></delete>
+    <delete id="deleteByMap"></delete>
+    <delete id="delete"></delete>
+    <delete id="deleteBatchIds"></delete>
+    <select id="selectById" resultType="java.lang.Object"></select>
+    <select id="selectBatchIds" resultType="java.util.List"></select>
+    <select id="selectByMap" resultType="java.util.List"></select>
+    <select id="selectOne" resultType="java.lang.Object"></select>
+    <select id="selectCount" resultType="java.lang.Integer"></select>
+    <select id="selectList" resultType="java.util.List"></select>
+    <select id="selectMaps" resultType="java.util.Map"></select>
+    <select id="selectObjs" resultType="java.lang.Object"></select>
+    <select id="selectPage" resultType="com.baomidou.mybatisplus.core.metadata.IPage"></select>
+    <select id="selectMapsPage" resultType="java.util.Map"></select>-->
+</mapper>
