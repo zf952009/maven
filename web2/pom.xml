@@ -29,7 +29,7 @@
     <c3p0.version>0.9.5.4</c3p0.version>
     <lombok.version>1.18.8</lombok.version>
     <aspectjweaver>1.9.4</aspectjweaver>
-    <junit.version>4.11</junit.version>
+    <junit.version>4.13.1</junit.version>
   </properties>
 
   <dependencies>
